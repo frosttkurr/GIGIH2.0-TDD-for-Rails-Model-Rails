@@ -89,6 +89,18 @@ RSpec.describe Food, type: :model do
     end
   end
 
+  it 'is invalid with non numeric values for price' do
+    food = Food.new(
+      name: 'Nasi Uduk',
+      description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
+      price: 'ASJDA&!@!'
+    )
+
+    food.valid?
+
+    expect(food.errors[:price]).to include("is not a number")
+  end
+  
   it 'is invalid with price less than 0.01' do
     food = Food.new(
       name: 'Nasi Uduk',
