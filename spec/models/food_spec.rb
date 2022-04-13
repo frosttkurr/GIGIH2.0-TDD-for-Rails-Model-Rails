@@ -1,11 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Food, type: :model do
-  it 'is valid with a name and a description' do
+  it 'is valid with a name, a description and a category' do
     food = Food.new(
       name: 'Nasi Uduk',
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
-      price: 15000.0
+      price: 15000.0,
+      category_id: 1
     )
 
     expect(food).to be_valid
@@ -15,7 +16,8 @@ RSpec.describe Food, type: :model do
     food = Food.new(
       name: nil,
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
-      price: 15000.0
+      price: 15000.0,
+      category_id: 1
     )
 
     food.valid?
@@ -27,7 +29,8 @@ RSpec.describe Food, type: :model do
     food = Food.new(
       name: 'Nasi Uduk',
       description: nil,
-      price: 15000.0
+      price: 15000.0,
+      category_id: 1
     )
 
     food.valid?
@@ -39,7 +42,8 @@ RSpec.describe Food, type: :model do
     food = Food.new(
       name: 'Nasi Uduk',
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
-      price: nil
+      price: nil,
+      category_id: 1
     )
 
     food.valid?
@@ -51,13 +55,15 @@ RSpec.describe Food, type: :model do
     food1 = Food.create(
       name: 'Ayam Lalapan',
       description: 'Ayam lalapan kebanggaan Indonesia, enak banget!',
-      price: 18000.0
+      price: 18000.0,
+      category_id: 1
     )
 
     food2 = Food.new(
       name: 'Ayam Lalapan',
       description: 'Ayam lalapan kebanggaan Lamongan, enak banget!',
-      price: 15000.0
+      price: 15000.0,
+      category_id: 1
     )    
 
     food2.valid?
@@ -70,19 +76,22 @@ RSpec.describe Food, type: :model do
       food1 = Food.create(
         name: 'Nasi Uduk',
         description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
-        price: 10000.0
+        price: 10000.0,
+        category_id: 1
       )
 
       food2 = Food.create(
         name: "Kerak Telor",
         description: "Betawi traditional spicy omelette made from glutinous rice cooked with egg and served with serundeng.",
-        price: 8000.0
+        price: 8000.0,
+        category_id: 1
       )
 
       food3 = Food.create(
         name: "Nasi Semur Jengkol",
         description: "Based on dongfruit, this menu promises a unique and delicious taste with a small hint of bitterness.",
-        price: 8000.0
+        price: 8000.0,
+        category_id: 1
       )
 
       expect(Food.by_letter("N")).to eq([food3, food1])
@@ -93,7 +102,8 @@ RSpec.describe Food, type: :model do
     food = Food.new(
       name: 'Nasi Uduk',
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
-      price: 'ASJDA&!@!'
+      price: 'ASJDA&!@!',
+      category_id: 1
     )
 
     food.valid?
@@ -105,11 +115,51 @@ RSpec.describe Food, type: :model do
     food = Food.new(
       name: 'Nasi Uduk',
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
-      price: 0.00
+      price: 0.00,
+      category_id: 1
     )
 
     food.valid?
 
     expect(food.errors[:price]).to include("must be greater than or equal to 0.01")
+  end
+
+  it 'is invalid without a category' do
+    food = Food.new(
+      name: 'Nasi Uduk',
+      description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
+      price: 15000.0,
+      category_id: nil
+    )
+
+    food.valid?
+
+    expect(food.errors[:category_id]).to include("can't be blank")
+  end
+
+  it 'is invalid with non numeric values for category id' do
+    food = Food.new(
+      name: 'Nasi Uduk',
+      description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
+      price: 15000.0,
+      category_id: 'Dessert'
+    )
+
+    food.valid?
+
+    expect(food.errors[:category_id]).to include("is not a number")
+  end
+
+  it 'is invalid with category id equal 0' do
+    food = Food.new(
+      name: 'Nasi Uduk',
+      description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
+      price: 15000.0,
+      category_id: 0
+    )
+
+    food.valid?
+
+    expect(food.errors[:category_id]).to include("must be greater than 0")
   end
 end
