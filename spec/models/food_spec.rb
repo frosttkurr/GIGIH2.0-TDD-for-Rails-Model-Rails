@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Food, type: :model do
-  it 'is valid with a name, a description and a category' do
+  it 'is valid with a name, a description, a price and a category' do
     food = Food.new(
       name: 'Nasi Uduk',
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
@@ -150,7 +150,7 @@ RSpec.describe Food, type: :model do
     expect(food.errors[:category_id]).to include("is not a number")
   end
 
-  it 'is invalid with category id equal 0' do
+  it 'is invalid with category id equal to 0' do
     food = Food.new(
       name: 'Nasi Uduk',
       description: 'Betawi style steamed rice cooked in coconut milk. Delicious!',
