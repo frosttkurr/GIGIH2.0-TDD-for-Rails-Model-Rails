@@ -78,3 +78,9 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
 end
+
+gem "digest", "~> 3.1.0"
+gem "net-protocol", "~> 0.1.2"
+gem "timeout", "~> 0.2.0"
+gem "io-wait", "~> 0.2.1"
+gem "ffi"
